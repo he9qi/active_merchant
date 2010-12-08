@@ -43,7 +43,7 @@ require 'active_merchant/billing'
 require 'active_merchant/version'
 
 # ActivemerchantPatchForChina
-require 'integrations_helper'
+# require 'integrations_helper'
 
 module ActiveMerchant #:nodoc:
   module Billing #:nodoc:    

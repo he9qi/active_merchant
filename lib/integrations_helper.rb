@@ -1,4 +1,4 @@
-require 'active_merchant/billing/integrations/helper'
+require 'active_merchant/billing/integrations/helper' 
 ActiveMerchant::Billing::Integrations::Helper.class_eval do
   alias_method :origin_add_field, :add_field
 
