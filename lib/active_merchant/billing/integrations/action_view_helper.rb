@@ -59,6 +59,7 @@ module ActiveMerchant #:nodoc:
               result << field_tag(field, value)
             else
               result << hidden_field_tag(field, value)
+            end
           end
          
           result << '</form>'
