@@ -24,7 +24,7 @@ module ActiveMerchant #:nodoc:
           mapping :show_url, 'show_url'
           mapping :body, 'body'
           mapping :subject, 'subject'
-          #mapping :charset, '_input_charset' # not valid anymore
+          mapping :charset, '_input_charset'
           mapping :service, 'service'
           mapping :payment_type, 'payment_type'
           mapping :extra_common_param, 'extra_common_param'
