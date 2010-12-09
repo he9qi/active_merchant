@@ -77,6 +77,33 @@ module ActiveMerchant #:nodoc:
                      )
             add_field('sign_type', 'MD5')
           end
+          
+          def payment_service_for(order, account, options = {}, &proc)          
+            raise ArgumentError, "Missing block" unless block_given?
+
+            service_name = options.delete(:service).to_s.camelize # for alipay
+
+            integration_module = ActiveMerchant::Billing::Integrations.const_get(service_name)
+
+            result = []
+            result << form_tag(integration_module.service_url, options.delete(:html) || {})
+            result << hidden_field_tag("_input_charset", "utf-8")
+            
+            service_class = integration_module.const_get('Helper')
+            service = service_class.new(order, account, options)
+
+            result << capture(service, &proc)
+
+            service.form_fields.each do |field, value|
+              result << hidden_field_tag(field, value)
+            end
+
+            result << '</form>'
+            result= result.join("\n")
+
+            concat(result.respond_to?(:html_safe) ? result.html_safe : result)
+            nil
+          end
 
         end
       end
