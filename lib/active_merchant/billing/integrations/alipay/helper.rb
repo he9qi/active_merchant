@@ -24,7 +24,7 @@ module ActiveMerchant #:nodoc:
           mapping :show_url, 'show_url'
           mapping :body, 'body'
           mapping :subject, 'subject'
-          # mapping :charset, '_input_charset' => this is passed through options now
+          mapping :charset, '_input_charset' #=> this is passed through options now
           mapping :service, 'service'
           mapping :payment_type, 'payment_type'
           mapping :extra_common_param, 'extra_common_param'
@@ -70,10 +70,10 @@ module ActiveMerchant #:nodoc:
           def initialize(order, account, options = {})
             options.assert_valid_keys([:amount, :charset])
             @fields = {}
+            self.charset     = options[:charset]
             self.order       = order
             self.account     = account
             self.amount      = options[:amount]
-            add_field_to_head('_input_charset', options[:charset]) if options[:charset]
           end
 
           def sign
