@@ -31,8 +31,14 @@ module ActiveMerchant #:nodoc:
         end
 
         def add_field(name, value)
-          return if name.blank? || value.blank?
-          @fields[name.to_s] = value.to_s
+          # check if name is not array or hash, and there's no value
+          # then don't add
+          if ![Array, Hash].include?(name.class) and value.nil?
+            @fields[name.to_s]
+          else
+            return if name.blank? || value.blank?
+            @fields[name.to_s] = value.to_s
+          end
         end
 
         def add_fields(subkey, params = {})

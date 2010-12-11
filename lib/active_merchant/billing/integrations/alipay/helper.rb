@@ -24,7 +24,7 @@ module ActiveMerchant #:nodoc:
           mapping :show_url, 'show_url'
           mapping :body, 'body'
           mapping :subject, 'subject'
-          mapping :charset, '_input_charset'
+          # mapping :charset, '_input_charset' => this is passed through options now
           mapping :service, 'service'
           mapping :payment_type, 'payment_type'
           mapping :extra_common_param, 'extra_common_param'
@@ -68,7 +68,12 @@ module ActiveMerchant #:nodoc:
           mapping :buyer_msg, 'buyer_msg'
 
           def initialize(order, account, options = {})
-            super
+            options.assert_valid_keys([:amount, :charset])
+            @fields = {}
+            self.order       = order
+            self.account     = account
+            self.amount      = options[:amount]
+            add_field_to_head('_input_charset', options[:charset]) if options[:charset]
           end
 
           def sign
@@ -78,33 +83,12 @@ module ActiveMerchant #:nodoc:
             add_field('sign_type', 'MD5')
           end
           
-          def payment_service_for(order, account, options = {}, &proc)          
-            raise ArgumentError, "Missing block" unless block_given?
-
-            service_name = options.delete(:service).to_s.camelize # for alipay
-
-            integration_module = ActiveMerchant::Billing::Integrations.const_get(service_name)
-
-            result = []
-            result << form_tag(integration_module.service_url, options.delete(:html) || {})
-            result << hidden_field_tag("_input_charset", "utf-8")
-            
-            service_class = integration_module.const_get('Helper')
-            service = service_class.new(order, account, options)
-
-            result << capture(service, &proc)
-
-            service.form_fields.each do |field, value|
-              result << hidden_field_tag(field, value)
-            end
-
-            result << '</form>'
-            result= result.join("\n")
-
-            concat(result.respond_to?(:html_safe) ? result.html_safe : result)
-            nil
+          # This is for the charset, alipay requires charset to be the first field
+          def add_field_to_head(name, value)
+            return if name.blank? || value.blank?
+            {name.to_s => value.to_s}.merge!(@fields)
           end
-
+          
         end
       end
     end

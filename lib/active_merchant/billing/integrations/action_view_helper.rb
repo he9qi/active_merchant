@@ -55,11 +55,7 @@ module ActiveMerchant #:nodoc:
           result << capture(service, &proc)
 
           service.form_fields.each do |field, value|
-            if service_name == 'Alipay' && field == '_input_charset'
-              result << field_tag(field, value)
-            else
-              result << hidden_field_tag(field, value)
-            end
+            result << hidden_field_tag(field, value)
           end
          
           result << '</form>'
