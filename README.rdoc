@@ -68,7 +68,7 @@ Since rails embeds a utf8= when we do a method GET using form submit and Alipay 
   - payment_service_for @express_order.id, ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT,
                             :service => :alipay,
                             :html => { :id => 'payment-form', :method => :get },
-							:charset => 'utf-8'	do |service|
+                            :charset => 'utf-8'	do |service|
   - service.total_fee express_order.price
   - service.seller :email => ActiveMerchant::Billing::Integrations::Alipay::EMAIL 
   - service.notify_url url_for(:only_path => false, :action => 'notify', :id => @express_order.id) 
