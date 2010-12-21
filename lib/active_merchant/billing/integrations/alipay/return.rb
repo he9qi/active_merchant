@@ -24,7 +24,6 @@ module ActiveMerchant #:nodoc:
               @message = "Alipay Error: ILLEGAL_SIGN"
               return false
             end
-
             true
           end
 

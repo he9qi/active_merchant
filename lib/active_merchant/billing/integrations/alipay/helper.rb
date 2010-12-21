@@ -83,12 +83,6 @@ module ActiveMerchant #:nodoc:
             add_field('sign_type', 'MD5')
           end
           
-          # This is for the charset, alipay requires charset to be the first field
-          def add_field_to_head(name, value)
-            return if name.blank? || value.blank?
-            {name.to_s => value.to_s}.merge!(@fields)
-          end
-          
         end
       end
     end
