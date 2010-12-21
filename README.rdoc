@@ -1,14 +1,14 @@
 = Active Merchant - he9qi
 
-== A combination of {active merchant}[https://github.com/Shopify/active_merchant] (by {shopify}[https://github.com/Shopify]) and {active_merchant_patch_for_china}[https://github.com/flyerhzm/activemerchant_patch_for_china] (by {flyerhzm}[https://github.com/flyerhzm]). All credit goes to these two brilliant githubbers!
+=== A combination of {active merchant}[https://github.com/Shopify/active_merchant] (by {shopify}[https://github.com/Shopify]) and {active_merchant_patch_for_china}[https://github.com/flyerhzm/activemerchant_patch_for_china] (by {flyerhzm}[https://github.com/flyerhzm]). All credit goes to these two brilliant githubbers!
 
-== active merchant - Shopify
+=== Active Merchant - Shopify
 
-=== {readme}[https://github.com/Shopify/active_merchant/blob/master/README.rdoc]
+{README}[https://github.com/Shopify/active_merchant/blob/master/README.rdoc]
 
-== activemerchant_patch_for_china - flyerhzm
+=== activemerchant_patch_for_china - flyerhzm
 
-=== {readme}[https://github.com/flyerhzm/activemerchant_patch_for_china/blob/master/README.textile]
+{README}[https://github.com/flyerhzm/activemerchant_patch_for_china/blob/master/README.textile]
 
 
 == Download
@@ -37,9 +37,30 @@ Installation from RubyGems
 
   > gem install activemerchant, :git => "git://github.com/he9qi/active_merchant.git"
 
+== Configuration (example: paypal and alipay)
+
+	# Active Merchant 
+	config.after_initialize do
+		ActiveMerchant::Billing::Base.mode = :test
+		paypal_options = {
+		    :login     => PAYPAL_CONFIG[:login],
+		    :password  => PAYPAL_CONFIG[:password],
+		    :signature => PAYPAL_CONFIG[:signature]
+		}
+
+		::STANDARD_GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(paypal_options)
+		::EXPRESS_GATEWAY  = ActiveMerchant::Billing::PaypalExpressGateway.new(paypal_options)
+
+		ActiveMerchant::Billing::Integrations::Alipay::KEY     = ALIPAY_CONFIG[:key]
+		ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT = ALIPAY_CONFIG[:account]
+		ActiveMerchant::Billing::Integrations::Alipay::EMAIL   = ALIPAY_CONFIG[:email]
+	end
+
 == Alipay usage update
 
-=== Since rails embeds a utf8= when we do a method post and Alipay requires the first parameter to be _input_charset=, > payment_service_for does not work well.  A slight modification has been made to the existing code and a javascript is added to remove the embedded utf8=  See sample usage below:
+Since rails embeds a utf8= when we do a method post and Alipay requires the first parameter to be _input_charset=, > payment_service_for does not work well.  A slight modification has been made to the existing code and a javascript is added to remove the embedded utf8=  See sample usage below:
+
+=== alipay.rb
 
 	- content_for :head do
 	  = javascript_include_tag 'alipay'
@@ -63,6 +84,6 @@ Installation from RubyGems
 	
 === alipay.js
 
-    $(function() {
-	  $('#payment-form > div input[name=utf8]').remove()
-    })
+      $(function() {
+	    $('#payment-form > div input[name=utf8]').remove()
+      })
