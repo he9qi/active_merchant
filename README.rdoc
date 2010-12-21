@@ -58,7 +58,7 @@ Installation from RubyGems
 
 == Alipay usage update
 
-Since rails embeds a utf8= when we do a method post and Alipay requires the first parameter to be _input_charset=, > payment_service_for does not work well.  A slight modification has been made to the existing code and a javascript is added to remove the embedded utf8=  See sample usage below:
+Since rails embeds a utf8= when we do a method GET using form submit and Alipay requires the first parameter to be _input_charset=, > payment_service_for does not work well.  A slight modification has been made to the existing code and a javascript is added to remove the embedded utf8=  See sample usage below:
 
 === alipay.rb
 
