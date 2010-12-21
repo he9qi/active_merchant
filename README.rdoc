@@ -39,22 +39,22 @@ Installation from RubyGems
 
 == Configuration (example: paypal and alipay)
 
-	# Active Merchant 
-	config.after_initialize do
-		ActiveMerchant::Billing::Base.mode = :test
-		paypal_options = {
-		    :login     => PAYPAL_CONFIG[:login],
-		    :password  => PAYPAL_CONFIG[:password],
-		    :signature => PAYPAL_CONFIG[:signature]
-		}
+  # Active Merchant 
+  config.after_initialize do
+  	ActiveMerchant::Billing::Base.mode = :test		
+    paypal_options = {
+  	    :login     => PAYPAL_CONFIG[:login],
+	    :password  => PAYPAL_CONFIG[:password],
+	    :signature => PAYPAL_CONFIG[:signature]
+	}
 
-		::STANDARD_GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(paypal_options)
-		::EXPRESS_GATEWAY  = ActiveMerchant::Billing::PaypalExpressGateway.new(paypal_options)
+	::STANDARD_GATEWAY = ActiveMerchant::Billing::PaypalGateway.new(paypal_options)
+	::EXPRESS_GATEWAY  = ActiveMerchant::Billing::PaypalExpressGateway.new(paypal_options)
 
-		ActiveMerchant::Billing::Integrations::Alipay::KEY     = ALIPAY_CONFIG[:key]
-		ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT = ALIPAY_CONFIG[:account]
-		ActiveMerchant::Billing::Integrations::Alipay::EMAIL   = ALIPAY_CONFIG[:email]
-	end
+	ActiveMerchant::Billing::Integrations::Alipay::KEY     = ALIPAY_CONFIG[:key]
+	ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT = ALIPAY_CONFIG[:account]
+	ActiveMerchant::Billing::Integrations::Alipay::EMAIL   = ALIPAY_CONFIG[:email]
+  end
 
 == Alipay usage update
 
@@ -62,28 +62,28 @@ Since rails embeds a utf8= when we do a method post and Alipay requires the firs
 
 === alipay.rb
 
-	- content_for :head do
-	  = javascript_include_tag 'alipay'
+  - content_for :head do
+    = javascript_include_tag 'alipay'
 
-	- payment_service_for @express_order.id, ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT,
-	                            :service => :alipay,
-	                            :html => { :id => 'payment-form', :method => :get },
-								:charset => 'utf-8'	do |service|
-	  - service.total_fee express_order.price
-	  - service.seller :email => ActiveMerchant::Billing::Integrations::Alipay::EMAIL 
-	  - service.notify_url url_for(:only_path => false, :action => 'notify', :id => @express_order.id) 
-	  - service.return_url url_for(:only_path => false, :action => 'done', :id => @express_order.id) 
-	  - service.show_url url_for(:only_path => false, :action => 'show', :id => @express_order.id) 
-	  - service.body express_order.body
-	  - service.service ActiveMerchant::Billing::Integrations::Alipay::Helper::CREATE_DIRECT_PAY_BY_USER 
-	  - service.payment_type 1 
-	  - service.subject express_order.subject
-	  - service.sign 
+  - payment_service_for @express_order.id, ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT,
+                            :service => :alipay,
+                            :html => { :id => 'payment-form', :method => :get },
+							:charset => 'utf-8'	do |service|
+  - service.total_fee express_order.price
+  - service.seller :email => ActiveMerchant::Billing::Integrations::Alipay::EMAIL 
+  - service.notify_url url_for(:only_path => false, :action => 'notify', :id => @express_order.id) 
+  - service.return_url url_for(:only_path => false, :action => 'done', :id => @express_order.id) 
+  - service.show_url url_for(:only_path => false, :action => 'show', :id => @express_order.id) 
+  - service.body express_order.body
+  - service.service ActiveMerchant::Billing::Integrations::Alipay::Helper::CREATE_DIRECT_PAY_BY_USER 
+  - service.payment_type 1 
+  - service.subject express_order.subject
+  - service.sign 
 
-	= button_to_function "Submit", "document.getElementById('payment-form').submit()"
+  = button_to_function "Submit", "document.getElementById('payment-form').submit()"
 	
 === alipay.js
-
-      $(function() {
-	    $('#payment-form > div input[name=utf8]').remove()
-      })
+ 
+  $(function() {
+    $('#payment-form > div input[name=utf8]').remove()
+  })
